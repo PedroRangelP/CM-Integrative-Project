@@ -1,1 +1,1 @@
-# CM-Integrative-Project
+# Integrative Project
