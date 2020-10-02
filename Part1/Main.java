@@ -18,6 +18,10 @@ public class Main {
             automata.addTransition(transition[0], charYState[0], charYState[1]);
         }
 
+        System.out.println(automata.processString(""));
+        System.out.println(automata.processString("aba"));
+        System.out.println(automata.processString("baaaabb"));
+
         sc.close();
     }
 }

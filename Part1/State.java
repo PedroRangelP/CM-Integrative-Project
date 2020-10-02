@@ -1,14 +1,18 @@
-import java.util.HashTable;
+import java.util.Hashtable;
 
 public class State {
     public String id;
     private boolean isFinal;
-    private HashTable<String, State> transitions;
+    private Hashtable<String, State> transitions;
 
     public State(String id) {
       this.id = id;
       this.isFinal = false;
-      this.transitions = new HashTable<>();
+      this.transitions = new Hashtable<>();
+    }
+
+    public String getId() {
+      return id;
     }
 
     public void setFinal() {
@@ -23,7 +27,7 @@ public class State {
         transitions.put(key, state);
     }
 
-    public void getTransition(String key) {
-        transitions.get(key);
+    public State getTransition(String key) {
+        return transitions.get(key);
     }
 }
