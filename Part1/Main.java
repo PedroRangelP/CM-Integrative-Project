@@ -4,7 +4,7 @@ import java.io.FileNotFoundException;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
-        Scanner sc = new Scanner(new File("test2.txt"));
+        Scanner sc = new Scanner(new File("test1.txt"));
         String[] states = sc.nextLine().split(",");
         String[] characters = sc.nextLine().split(",");
         String initialState = sc.next(); sc.nextLine();
