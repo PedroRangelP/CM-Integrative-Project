@@ -23,11 +23,11 @@ public class State {
       return isFinal;
     }
 
-    public void setTransition(State state, String key) {
-        transitions.put(key, state);
+    public void setTransition(String character, State state) {
+        transitions.put(character, state);
     }
 
-    public State getTransition(String key) {
-        return transitions.get(key);
+    public State getTransition(String character) {
+        return transitions.get(character);
     }
 }
