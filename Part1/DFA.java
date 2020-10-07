@@ -51,24 +51,20 @@ public class DFA {
     }
 
     public void minimizeDFA() {
-        String[] finalStates = new String[states.length];
-        int finalCounter = 0;
+        System.out.println("*-*-*-*-*-*-*-*-*-* Minimizing DFA *-*-*-*-*-*-*-*-*-*");
         String[][] minimizedTable = minimizeTransitionTable(newTransitionTable());
+        String[] finalStates = new String[minimizedTable.length];
+        int totalFinal = 0;
 
         for (int i=0; i<minimizedTable.length; i++) {
-            if (dfa.get(minimizedTable[i][0]).isFinal()&minimizedTable[i][0].equals(states[i])) {
-                finalStates[finalCounter] = states[i];
-                finalCounter++;
+            String currentState = minimizedTable[i][0];
+
+            if (dfa.get(currentState).isFinal()) {
+                finalStates[totalFinal] = states[i];
+                totalFinal++;
             }
             
             if (minimizedTable[i][0].equals(states[i])==false) {
-                String currentState = minimizedTable[i][0];
-
-                if (dfa.get(currentState).isFinal()) {
-                    finalStates[finalCounter] = states[i];
-                    finalCounter++;
-                }
-
                 System.out.println("State "+currentState+ " renamed to "+states[i]+"\n");
 
                 for (int a=0; a<minimizedTable.length; a++) {
@@ -81,29 +77,25 @@ public class DFA {
                 System.out.println("");
             }
         }
-
+        System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+        
         //TODO Update the hashtable with the minimized transition table
-        /*dfa = new Hashtable<>();
+        dfa.clear();
+        states = new String[minimizedTable.length];
 
         for (int i=0; i<minimizedTable.length; i++) {
-            states = new String[minimizedTable.length];
-            dfa.put(minimizedTable[i][0], new State(minimizedTable[i][0]));
             states[i] = minimizedTable[i][0];
-
+            dfa.put(minimizedTable[i][0], new State(minimizedTable[i][0]));
         }
 
-        for (int i=0; i<minimizedTable.length; i++)
+        for (int i=0; i<minimizedTable.length; i++) {
             for (int j=1; j<alphabet.length+1; j++)
-                dfa.get(minimizedTable[i][0]).setTransition(alphabet[j-1], dfa.get(minimizedTable[i][j-1]));
+                if (!minimizedTable[i][j].equals(""))
+                    addTransition(minimizedTable[i][0], alphabet[j-1], minimizedTable[i][j]);
 
-        for (int i=0; i<finalStates.length; i++) {
             if (finalStates[i]!=null)
                 dfa.get(finalStates[i]).setFinal();
-            else
-                break;
-        }*/
-
-        //printTransitionTable(minimizedTable);
+        }
     }
 
     private String[][] minimizeTransitionTable(String[][] transitionTable) {
@@ -137,14 +129,14 @@ public class DFA {
                     System.out.println("Row "+(i+1)+" is equal to row "+(j+1)+" | State "+states[j]+ " renamed to "+states[i]+"\n");
             
                     for (int a=0; a<transitionTable.length; a++) {
-                        //System.out.println(row);
                         for (int b=0; b<alphabet.length+1; b++) {
                             if (a==j)
                                 transitionTable[a][b] = "";
                             else {
                                 transitionTable[a][b] = (transitionTable[a][b].equals(states[j])) ? states[i] : transitionTable[a][b];
                                 minimizedTable[row][b] = transitionTable[a][b];
-                                System.out.print(minimizedTable[row][b]+"   ");
+                                
+                                if(transitionTable[a][0].equals("")==false) System.out.print(minimizedTable[row][b]+"   ");
                             }
                         }
                         if (transitionTable[a][0].equals("")==false) {
@@ -158,17 +150,13 @@ public class DFA {
         return minimizedTable;
     }
 
-    public String[][] newTransitionTable() {
+    private String[][] newTransitionTable() {
         String[][] transitionTable = new String[states.length][alphabet.length+1];
 
         for (int i=0; i<states.length; i++) {
-            //transitionTable[i][0] = (states[i-1].equals(initialState)) ? "->"+states[i-1] : "  "+states[i-1];
-            //transitionTable[i][0] = (dfa.get(states[i-1]).isFinal()) ? transitionTable[i][0]+"*" : transitionTable[i][0]+" ";
             transitionTable[i][0] = states[i];
 
             for (int j=1; j<alphabet.length+1; j++) {
-                //transitionTable[0][j] = alphabet[j-1];
-
                 State result = dfa.get(states[i]).getTransition(alphabet[j-1]);
                 transitionTable[i][j] = (result==null) ? "" : result.getId();
             }
@@ -176,11 +164,27 @@ public class DFA {
         return transitionTable;
     }
 
-    /*private void printTransitionTable(String[][] transitionTable) {
-        for (int i=0; i<transitionTable.length; i++){
-            for (int j=0; j<alphabet.length+1; j++)
+    public void getTransitionTable() {
+        String[][] content = newTransitionTable();
+        String[][] transitionTable = new String[states.length+1][alphabet.length+1];
+        transitionTable[0][0] = "     ";
+
+        for (int i=0; i<transitionTable.length; i++) {
+            if (i>0) {
+                transitionTable[i][0] = (content[i-1][0].equals(initialState)) ? "->"+content[i-1][0] : "  "+content[i-1][0];
+                transitionTable[i][0] = (dfa.get(content[i-1][0]).isFinal()) ? transitionTable[i][0]+"*" : transitionTable[i][0]+" ";
+            }
+            
+            for (int j=0; j<alphabet.length+1; j++) {
+                if (j>0) {
+                    transitionTable[0][j] = alphabet[j-1];
+                    transitionTable[i][j] = (i>0) ? content[i-1][j] : transitionTable[i][j];
+                }
                 System.out.print(transitionTable[i][j]+"   ");
+            }    
             System.out.println("");
         }
-    }*/
+
+        //return transitionTable;
+    }
 }

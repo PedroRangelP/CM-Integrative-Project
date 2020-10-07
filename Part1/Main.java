@@ -18,11 +18,16 @@ public class Main {
             automata.addTransition(transition[0], charYState[0], charYState[1]);
         }
         sc.close();
-        /*
+        
+        automata.getTransitionTable();
         System.out.println(automata.processString(""));
         System.out.println(automata.processString("aba"));
-        System.out.println(automata.processString("baaaabb"));*/
+        System.out.println(automata.processString("baaaabb"));
 
         automata.minimizeDFA();
+        automata.getTransitionTable();
+        System.out.println(automata.processString(""));
+        System.out.println(automata.processString("aba"));
+        System.out.println(automata.processString("baaaabb"));
     }
 }
