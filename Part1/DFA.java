@@ -51,7 +51,7 @@ public class DFA {
     }
 
     public void minimizeDFA() {
-        System.out.println("*-*-*-*-*-*-*-*-*-* Minimizing DFA *-*-*-*-*-*-*-*-*-*");
+        //System.out.println("*-*-*-*-*-*-*-*-*-* Minimizing DFA *-*-*-*-*-*-*-*-*-*");
         String[][] minimizedTable = minimizeTransitionTable(newTransitionTable());
         String[] finalStates = new String[minimizedTable.length];
         int totalFinal = 0;
@@ -65,21 +65,20 @@ public class DFA {
             }
             
             if (minimizedTable[i][0].equals(states[i])==false) {
-                System.out.println("State "+currentState+ " renamed to "+states[i]+"\n");
+                //System.out.println("State "+currentState+ " renamed to "+states[i]+"\n");
 
                 for (int a=0; a<minimizedTable.length; a++) {
                     for (int b=0; b<alphabet.length+1; b++) {
                         minimizedTable[a][b] = (minimizedTable[a][b].equals(currentState)) ? states[i] : minimizedTable[a][b];
-                        System.out.print(minimizedTable[a][b]+"   ");
+                        //System.out.print(minimizedTable[a][b]+"   ");
                     }
-                    System.out.println("");
+                    //System.out.println("");
                 }
-                System.out.println("");
+                //System.out.println("");
             }
         }
-        System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+        //System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
         
-        //TODO Update the hashtable with the minimized transition table
         dfa.clear();
         states = new String[minimizedTable.length];
 
@@ -126,7 +125,7 @@ public class DFA {
                     minimizedTable = new String[totalStates][alphabet.length+1];
                     int row = 0;
 
-                    System.out.println("Row "+(i+1)+" is equal to row "+(j+1)+" | State "+states[j]+ " renamed to "+states[i]+"\n");
+                    //System.out.println("Row "+(i+1)+" is equal to row "+(j+1)+" | State "+states[j]+ " renamed to "+states[i]+"\n");
             
                     for (int a=0; a<transitionTable.length; a++) {
                         for (int b=0; b<alphabet.length+1; b++) {
@@ -136,15 +135,15 @@ public class DFA {
                                 transitionTable[a][b] = (transitionTable[a][b].equals(states[j])) ? states[i] : transitionTable[a][b];
                                 minimizedTable[row][b] = transitionTable[a][b];
                                 
-                                if(transitionTable[a][0].equals("")==false) System.out.print(minimizedTable[row][b]+"   ");
+                                //if(transitionTable[a][0].equals("")==false) System.out.print(minimizedTable[row][b]+"   ");
                             }
                         }
                         if (transitionTable[a][0].equals("")==false) {
                             row++;
-                            System.out.println("");
+                            //System.out.println("");
                         }
                     }
-                    System.out.println("");
+                    //System.out.println("");
                 }
             }
         return minimizedTable;
