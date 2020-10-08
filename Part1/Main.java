@@ -1,10 +1,19 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
-public class Main {
+/**
+ * @author Diego Montaño
+ * @author Pedro Rangel
+ */
+
+public class Main implements Application {
     public static void main(String[] args) throws FileNotFoundException {
-        Scanner sc = new Scanner(new File("test1.txt"));
+        Scanner sc = new Scanner(new File("test3.txt"));
         String[] states = sc.nextLine().split(",");
         String[] characters = sc.nextLine().split(",");
         String initialState = sc.next(); sc.nextLine();
@@ -20,14 +29,23 @@ public class Main {
         sc.close();
         
         automata.getTransitionTable();
-        System.out.println(automata.processString(""));
+        /*System.out.println(automata.processString(""));
         System.out.println(automata.processString("aba"));
-        System.out.println(automata.processString("baaaabb"));
+        System.out.println(automata.processString("baaaabb"));*/
 
         automata.minimizeDFA();
         automata.getTransitionTable();
-        System.out.println(automata.processString(""));
+        /*System.out.println(automata.processString(""));
         System.out.println(automata.processString("aba"));
-        System.out.println(automata.processString("baaaabb"));
+        System.out.println(automata.processString("baaaabb"));*/
+    }
+
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("DFA by Diegod and Pedrito");
+        GridPane grid = new GridPane();
+        Scene scene = new Scene(grid);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 }
