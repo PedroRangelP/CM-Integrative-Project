@@ -1,3 +1,5 @@
+package dfa;
+
 import java.util.Hashtable;
 
 public class State {
@@ -48,7 +50,7 @@ public class State {
    * @param state The state that this transition leads to.
    */
   public void setTransition(String character, State state) {
-      transitions.put(character, state);
+    transitions.put(character, state);
   }
 
     
@@ -58,6 +60,6 @@ public class State {
    * @return State The resulting state.
    */
   public State getTransition(String character) {
-      return transitions.get(character);
+    return transitions.get(character);
   }
 }

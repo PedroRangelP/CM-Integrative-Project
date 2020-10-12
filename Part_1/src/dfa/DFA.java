@@ -1,3 +1,5 @@
+package dfa;
+
 import java.util.Hashtable;
 
 public class DFA {
@@ -46,7 +48,7 @@ public class DFA {
    * @param chain The string to process.
    * @return boolean The result if the given chain is accepted by the automata.
    */
-  public boolean processString(String chain) {
+  public boolean evaluateString(String chain) {
     return processStringRecursive(chain, dfa.get(initialState), 0);
   }
   
