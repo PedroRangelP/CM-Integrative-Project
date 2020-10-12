@@ -23,7 +23,7 @@
 hs_err_pid*
 
 # Visual Studio Code settings
-.vscode/*
+/Part_1/.vscode/*
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
