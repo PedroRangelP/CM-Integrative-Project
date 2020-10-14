@@ -191,19 +191,18 @@ public class DFA {
 
   
   /**
-   * Prints the transition table of the automata.
+   * Returns the transition table of the automata.
+   * @return String[][]
    */
-
-  //TODO Change the method in order to return the transition table (if necessary to the main app)
-  public void getTransitionTable() {
+  public String[][] getTransitionTable() {
     String[][] content = newTransitionTable();
     String[][] transitionTable = new String[states.length+1][alphabet.length+1];
-    transitionTable[0][0] = "     ";
+    transitionTable[0][0] = " ";
 
     for (int i=0; i<transitionTable.length; i++) {
       if (i>0) {
-        transitionTable[i][0] = (content[i-1][0].equals(initialState)) ? "->"+content[i-1][0] : "  "+content[i-1][0];
-        transitionTable[i][0] = (dfa.get(content[i-1][0]).isFinal()) ? transitionTable[i][0]+"*" : transitionTable[i][0]+" ";
+        transitionTable[i][0] = (content[i-1][0].equals(initialState)) ? "->"+content[i-1][0] : content[i-1][0];
+        transitionTable[i][0] = (dfa.get(content[i-1][0]).isFinal()) ? transitionTable[i][0]+"*" : transitionTable[i][0];
       }
       
       for (int j=0; j<alphabet.length+1; j++) {
@@ -211,11 +210,11 @@ public class DFA {
           transitionTable[0][j] = alphabet[j-1];
           transitionTable[i][j] = (i>0) ? content[i-1][j] : transitionTable[i][j];
         }
-        System.out.print(transitionTable[i][j]+"   ");
+        //System.out.print(transitionTable[i][j]+"   ");
       }    
-      System.out.println("");
+      //System.out.println("");
     }
 
-    //return transitionTable;
+    return transitionTable;
   }
 }

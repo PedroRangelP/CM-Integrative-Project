@@ -1,0 +1,31 @@
+@font-face {
+  font-family: "Comfortaa";
+  src: url("fonts/Comfortaa-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Comfortaa Bold";
+  src: url("fonts/Comfortaa-Bold.ttf");
+}
+
+.root {
+  -fx-font-family: "Comfortaa";
+  -fx-font-size: 14px;
+}
+
+.h1 {
+  -fx-font-weight: bold;
+  -fx-font-size: 35px;
+  -fx-padding: 20 0 0 0;
+}
+
+.h2 {
+  -fx-font-weight: bold;
+  -fx-font-size: 20px;
+  -fx-padding: 20 0 0 0;
+}
+
+.h3 {
+  -fx-font-weight: bold;
+  -fx-font-size: 16px;
+}
