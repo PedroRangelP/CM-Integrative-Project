@@ -29,3 +29,7 @@
   -fx-font-weight: bold;
   -fx-font-size: 16px;
 }
+
+.transitionTable {
+  -fx-grid-lines-visible: true;
+}

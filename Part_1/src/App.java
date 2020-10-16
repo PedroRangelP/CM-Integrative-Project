@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
 import javafx.scene.Group;
@@ -8,6 +9,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -31,10 +33,12 @@ import dfa.DFA;
 public class App extends Application {
   private DFA automata;
   private GridPane transitionTable = new GridPane();
-  private Label lblResult = new Label();;
+  private Label lblResult = new Label();
+  private GridPane processSteps = new GridPane();
 
   public static void main(String[] args) {
-    launch();
+    int[][] test = getCenters(4, getBigRadious(4));
+    launch(args);
   }
 
   public void start(Stage mainStage) {
@@ -78,10 +82,9 @@ public class App extends Application {
     Label lblTable = new Label("Transition Table");
     lblTable.getStyleClass().add("h3");
 
-
     Label lblEvaluate = new Label("Evaluate String");
     lblEvaluate.getStyleClass().add("h2");
-    Label lblChain = new Label("File:");
+    Label lblChain = new Label("Chain:");
     lblChain.getStyleClass().add("h3");
     TextField txtChain = new TextField();
     Button bttnEvaluate = new Button("Process");
@@ -91,7 +94,7 @@ public class App extends Application {
       }
     });
 
-    /*
+
     StackPane stackPane = new StackPane();
     Group test = new Group();
 
@@ -132,7 +135,6 @@ public class App extends Application {
 
     test.getChildren().addAll(curve,transition,h1,h2,q1,q2,name);
     stackPane.getChildren().add(test);
-    */
     
     GridPane controlsPane = new GridPane();
     controlsPane.add(lblFile, 0, 0);
@@ -163,9 +165,12 @@ public class App extends Application {
     VBox base = new VBox();
     base.setSpacing(20);
     base.setPadding(new Insets(20, 20, 20, 20));
-    base.getChildren().addAll(controlsPane, dfaControlPane, dfaPane, processPane);
+    base.getChildren().addAll(stackPane, controlsPane, dfaControlPane, dfaPane, processPane, processSteps);
 
-    Scene scene = new Scene(base);
+    ScrollPane scrollPane = new ScrollPane();
+    scrollPane.setContent(base);
+
+    Scene scene = new Scene(scrollPane);
     scene.getStylesheets().add("resources/stylesheet.css");
     mainStage.setTitle("DFA by Diegod and Pedrito");
     mainStage.setScene(scene);
@@ -218,16 +223,58 @@ public class App extends Application {
         transitionTable.add(data, j, i);
       }
     }
-    transitionTable.setStyle("-fx-grid-lines-visible: true");
+    transitionTable.getStyleClass().add("transitionTable");
     transitionTable.setAlignment(Pos.CENTER);
   }
 
   private void evaluateString(String chain) {
     boolean result = automata.evaluateString(chain);
+    ArrayList<String> steps = automata.getProcessSteps();
 
     if(result==true)
       lblResult.setText("The string is accepted");
     else
       lblResult.setText("The string is not accepted");
+
+    processSteps.getChildren().removeAll(processSteps.getChildren());
+    int rowIndex = 0;
+    for (String string : steps) {
+      Label step = new Label(string);
+      processSteps.add(step, 0, rowIndex);
+      rowIndex++;
+    }
   }
+
+  private static int getBigRadious(int numStates){
+    final int STATE_RADIUS = 30;
+    final int SPACE_BETWEEN_STATES = 20;
+    int radious = (STATE_RADIUS + SPACE_BETWEEN_STATES) / ((int)Math.ceil(Math.tan(Math.toRadians(180/numStates))));
+    return radious;
+  }
+
+  private static int[][] getCenters(int numStates, int radious) {
+    int[][] centers = new int[numStates][2];
+    double angle = Math.toRadians(360/numStates);
+    double currentAngle = 0;
+
+    for (int i=0; i<numStates; i++) {
+      System.out.println("Angle: " + currentAngle);
+      double x = radious * Math.cos(currentAngle);
+      double y = radious * Math.sin(currentAngle);
+      //System.out.println("x"+i+": "+x);
+      //System.out.println("y"+i+": "+y);
+
+      centers[i][0] = (int) Math.round(x+radious);
+      System.out.println("x"+i+": "+centers[i][0]);
+
+      centers[i][1] = (int) Math.round(y+radious);
+      System.out.println("y"+i+": "+centers[i][1]);
+
+
+      currentAngle+=angle;
+    }
+
+    return centers;
+  }
+
 }

@@ -1,5 +1,6 @@
 package dfa;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 public class DFA {
@@ -7,6 +8,7 @@ public class DFA {
   private String[] states;
   private String[] alphabet;
   private String initialState;
+  private ArrayList<String> processSteps;
   
   
   /**
@@ -49,6 +51,7 @@ public class DFA {
    * @return boolean The result if the given chain is accepted by the automata.
    */
   public boolean evaluateString(String chain) {
+    processSteps = new ArrayList<>();
     return processStringRecursive(chain, dfa.get(initialState), 0);
   }
   
@@ -58,19 +61,26 @@ public class DFA {
 
     if(index == chain.length()) {
       nextState = currentState;
-      //System.out.println("S("+currentState.getId()+","+character+") = "+nextState.getId());
+      processSteps.add("S("+currentState.getId()+","+character+") = "+nextState.getId());
+      System.out.println("S("+currentState.getId()+","+character+") = "+nextState.getId());
       return currentState.isFinal();
     }else {
       character = chain.charAt(index)+"";
       nextState = currentState.getTransition(character);
       if(nextState == null) {
-        //System.out.println("S("+currentState.getId()+","+character+") = sink");
+        processSteps.add("S("+currentState.getId()+","+character+") = sink");
+        System.out.println("S("+currentState.getId()+","+character+") = sink");
         return false;
       }else {
-        //System.out.println("S("+currentState.getId()+","+character+") = "+nextState.getId());
+        processSteps.add("S("+currentState.getId()+","+character+") = "+nextState.getId());
+        System.out.println("S("+currentState.getId()+","+character+") = "+nextState.getId());
         return processStringRecursive(chain, nextState, index+1);
       } 
     }
+  }
+
+  public ArrayList<String> getProcessSteps() {
+    return processSteps;
   }
 
   /**
