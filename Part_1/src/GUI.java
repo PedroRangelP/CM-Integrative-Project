@@ -11,7 +11,7 @@ import javafx.scene.text.Text;
 
 public class GUI extends Application {
 
-  public String[] states = {"q0", "q1", "q2", "q3", "q4", "q5"};
+  public String[] states = {"q0", "q1", "q2", "q3"};
   public static void main(String[] args) {
     launch();
   }
@@ -45,30 +45,33 @@ public class GUI extends Application {
   private static int getBigRadious(int numStates){
     System.out.println(numStates);
     final int STATE_RADIUS = 30;
-    final int SPACE_BETWEEN_STATES = numStates*10;
-    double cosine = Math.cos(Math.toRadians(360.0/numStates));
+    final int SPACE_BETWEEN_STATES = 30;
+
+    double angle = Math.toRadians((360/numStates)/2);
+    double apothem = (STATE_RADIUS + SPACE_BETWEEN_STATES) / Math.tan(angle);
+    int radius = (int)Math.round(apothem * (1/Math.cos(angle)));
+    
+    /*double cosine = Math.cos(Math.toRadians(360/numStates));
     System.out.println(String.format("coseno: %f", cosine));
-    int radious = (int)Math.round((STATE_RADIUS + SPACE_BETWEEN_STATES) / cosine);
-    System.out.println(String.format("big radious: %d", radious));
-    return radious;
+    int radius = (int)Math.round((STATE_RADIUS + SPACE_BETWEEN_STATES) / cosine);*/
+    System.out.println(String.format("big radius: %d", radius));
+    return radius;
   }
 
-  private static int[][] getCenters(int numStates, int radious) {
+  private static int[][] getCenters(int numStates, int radius) {
     int[][] centers = new int[numStates][2];
     double angle = Math.toRadians(360/numStates);
     double currentAngle = 0;
 
     for (int i=0; i<numStates; i++) {
       System.out.println("Angle: " + currentAngle);
-      double x = radious * Math.cos(currentAngle);
-      double y = radious * Math.sin(currentAngle);
-      //System.out.println("x"+i+": "+x);
-      //System.out.println("y"+i+": "+y);
+      double x = radius * Math.cos(currentAngle);
+      double y = radius * Math.sin(currentAngle);
 
-      centers[i][0] = (int) Math.round(x+radious);
+      centers[i][0] = (int) Math.round(x+radius);
       System.out.println("x"+i+": "+centers[i][0]);
 
-      centers[i][1] = (int) Math.round(y+radious);
+      centers[i][1] = (int) Math.round(y+radius);
       System.out.println("y"+i+": "+centers[i][1]);
 
 
