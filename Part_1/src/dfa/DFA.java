@@ -33,6 +33,13 @@ public class DFA {
       dfa.get(finalStates[i]).setFinal();
   }
 
+  /**
+   * Retur
+   */
+  public Hashtable<String, States> getDfa(){
+    return this.dfa;
+  }
+
   
   /**
    * Adds a transition from the given state to the other state processing the character.
@@ -82,9 +89,16 @@ public class DFA {
   public ArrayList<String> getProcessSteps() {
     return processSteps;
   }
+/**
+ * Return an array of strings with all the states of this DFA
+ */
+  public String[] getStates(){
+    return this.states;
+  }
 
   /**
    * Minimizes the DFA and updates the transitions in the automata
+   * @return The states of this DFA
    */
   public void minimizeDFA() {
     //System.out.println("*-*-*-*-*-*-*-*-*-* Minimizing DFA *-*-*-*-*-*-*-*-*-*");

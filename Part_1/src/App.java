@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.*;
-import javafx.scene.Group;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -15,15 +14,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.QuadCurve;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import dfa.DFA;
+import dfa.DrawDFA;
 
 /**
  * @author Pedro Rangel
@@ -35,9 +29,9 @@ public class App extends Application {
   private GridPane transitionTable = new GridPane();
   private Label lblResult = new Label();
   private GridPane processSteps = new GridPane();
+  private StackPane canvasDFA = new StackPane();
 
   public static void main(String[] args) {
-    int[][] test = getCenters(4, getBigRadious(4));
     launch(args);
   }
 
@@ -93,48 +87,6 @@ public class App extends Application {
         evaluateString(txtChain.getText());
       }
     });
-
-
-    StackPane stackPane = new StackPane();
-    Group test = new Group();
-
-    //TEST STATE
-    Circle q1 = new Circle(50,60,30);
-    Circle q2 = new Circle(200,60,30);
-
-    q2.setFill(Color.YELLOW);
-    q2.setStroke(Color.BLACK);
-
-    
-    //TEST TRANSITION
-    QuadCurve curve = new QuadCurve(80, 60, 125, 10, 170, 60);
-    curve.setStroke(Color.BLUE);
-    curve.setFill(null);
-
-    //TEST ARROW
-    //double angle = Math.atan2((endY - startY), (endX - startX)) - Math.PI / 2.0;
-    double angle = Math.atan2((60 - 10), (170 - 125)) - Math.PI / 2.0;
-    double sin = Math.sin(angle);
-    double cos = Math.cos(angle);
-
-    //double x1 = (- 1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * arrowHeadSize + endX;
-    double x1 = (- 1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * 10 + 170;
-    double y1 = (- 1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * 10 + 60;
-
-    double x2 = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * 10 + 170;
-    double y2 = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * 10 + 60;
-
-    Line h1 = new Line(x1, y1,170,60);
-    Line h2 = new Line(x2, y2,170,60);
-
-    //TEST TEXT
-    Text transition = new Text(125,30,"a");
-    Text name = new Text(200,60,"q1");
-    
-    stackPane.setStyle("-fx-border-color: blue;");
-
-    test.getChildren().addAll(curve,transition,h1,h2,q1,q2,name);
-    stackPane.getChildren().add(test);
     
     GridPane controlsPane = new GridPane();
     controlsPane.add(lblFile, 0, 0);
@@ -150,6 +102,7 @@ public class App extends Application {
     
     dfaPane.add(lblTable, 0, 0);
     dfaPane.add(transitionTable, 0, 1);
+    dfaPane.add(canvasDFA, 1, 0, 1, 2);
     dfaPane.setVgap(10);
     dfaPane.setVisible(false);
   
@@ -165,7 +118,7 @@ public class App extends Application {
     VBox base = new VBox();
     base.setSpacing(20);
     base.setPadding(new Insets(20, 20, 20, 20));
-    base.getChildren().addAll(stackPane, controlsPane, dfaControlPane, dfaPane, processPane, processSteps);
+    base.getChildren().addAll(controlsPane, dfaControlPane, dfaPane, processPane, processSteps);
 
     ScrollPane scrollPane = new ScrollPane();
     scrollPane.setContent(base);
@@ -194,7 +147,8 @@ public class App extends Application {
         automata.addTransition(transition[0], charYState[0], charYState[1]);
       }
       sc.close();
-
+      
+      drawDFA();
       showTrasitionTable();
 
     }catch (IOException ioe) {
@@ -202,8 +156,14 @@ public class App extends Application {
     }
   }
 
+  private void drawDFA() {
+    DrawDFA drawDFA = new DrawDFA(automata);
+    drawDFA.getDFACanvas(canvasDFA);
+  }
+
   private void minimizeDFA() {
     automata.minimizeDFA();
+    drawDFA();
     showTrasitionTable();
   }
 
@@ -244,37 +204,4 @@ public class App extends Application {
       rowIndex++;
     }
   }
-
-  private static int getBigRadious(int numStates){
-    final int STATE_RADIUS = 30;
-    final int SPACE_BETWEEN_STATES = 20;
-    int radious = (STATE_RADIUS + SPACE_BETWEEN_STATES) / ((int)Math.ceil(Math.tan(Math.toRadians(180/numStates))));
-    return radious;
-  }
-
-  private static int[][] getCenters(int numStates, int radious) {
-    int[][] centers = new int[numStates][2];
-    double angle = Math.toRadians(360/numStates);
-    double currentAngle = 0;
-
-    for (int i=0; i<numStates; i++) {
-      System.out.println("Angle: " + currentAngle);
-      double x = radious * Math.cos(currentAngle);
-      double y = radious * Math.sin(currentAngle);
-      //System.out.println("x"+i+": "+x);
-      //System.out.println("y"+i+": "+y);
-
-      centers[i][0] = (int) Math.round(x+radious);
-      System.out.println("x"+i+": "+centers[i][0]);
-
-      centers[i][1] = (int) Math.round(y+radious);
-      System.out.println("y"+i+": "+centers[i][1]);
-
-
-      currentAngle+=angle;
-    }
-
-    return centers;
-  }
-
 }
