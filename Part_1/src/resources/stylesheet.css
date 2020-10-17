@@ -11,6 +11,7 @@
 .root {
   -fx-font-family: "Comfortaa";
   -fx-font-size: 14px;
+  -fx-background: #F0F8FF;
 }
 
 .h1 {
@@ -32,4 +33,10 @@
 
 .transitionTable {
   -fx-grid-lines-visible: true;
+}
+
+.button {
+  -fx-text-fill: #F0F8FF;
+  -fx-border-radius: 5;
+  -fx-background-color: #191970;
 }

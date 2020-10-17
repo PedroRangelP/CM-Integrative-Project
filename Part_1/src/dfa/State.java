@@ -7,7 +7,6 @@ public class State {
   private boolean isFinal;
   private Hashtable<String, State> transitions;
 
-
   /**
    * Creates a new state with an id and no transitions.
    * @param id The name of the state

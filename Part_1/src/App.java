@@ -50,6 +50,7 @@ public class App extends Application {
         bttnMinimize.setDisable(true);
       }
     });
+    bttnMinimize.getStyleClass().add("button");
 
     FileChooser fileChooser = new FileChooser();
     fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("txt", "*.txt"));
@@ -72,6 +73,7 @@ public class App extends Application {
         }
       }
     });
+    bttnChoose.getStyleClass().add("button");
 
     Label lblTable = new Label("Transition Table");
     lblTable.getStyleClass().add("h3");
@@ -87,6 +89,7 @@ public class App extends Application {
         evaluateString(txtChain.getText());
       }
     });
+    bttnEvaluate.getStyleClass().add("button");
     
     GridPane controlsPane = new GridPane();
     controlsPane.add(lblFile, 0, 0);
@@ -98,6 +101,7 @@ public class App extends Application {
     dfaControlPane.add(lblDFA, 0, 0);
     dfaControlPane.add(bttnMinimize, 0, 1);
     dfaControlPane.setVgap(10);
+    dfaControlPane.setHgap(30);
     dfaControlPane.setVisible(false);
     
     dfaPane.add(lblTable, 0, 0);
@@ -106,11 +110,11 @@ public class App extends Application {
     dfaPane.setVgap(10);
     dfaPane.setVisible(false);
   
-    processPane.add(lblEvaluate, 0, 0);
+    processPane.add(lblEvaluate, 0, 0, 3, 1);
     processPane.add(lblChain, 0, 1);
     processPane.add(txtChain, 1, 1);
     processPane.add(bttnEvaluate, 2, 1);
-    processPane.add(lblResult, 0, 2);
+    processPane.add(lblResult, 0, 2, 3, 1);
     processPane.setHgap(10);
     processPane.setVgap(15);
     processPane.setVisible(false);
@@ -184,7 +188,7 @@ public class App extends Application {
       }
     }
     transitionTable.getStyleClass().add("transitionTable");
-    transitionTable.setAlignment(Pos.CENTER);
+    transitionTable.setAlignment(Pos.TOP_CENTER);
   }
 
   private void evaluateString(String chain) {

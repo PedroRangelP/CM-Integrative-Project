@@ -34,9 +34,10 @@ public class DFA {
   }
 
   /**
-   * Retur
+   * Returns a Hashtable with all the states in this DFA
+   * @return A Hashtable that maps states to State objects
    */
-  public Hashtable<String, States> getDfa(){
+  public Hashtable<String, State> getDfa(){
     return this.dfa;
   }
 
@@ -68,40 +69,63 @@ public class DFA {
 
     if(index == chain.length()) {
       nextState = currentState;
-      processSteps.add("S("+currentState.getId()+","+character+") = "+nextState.getId());
-      System.out.println("S("+currentState.getId()+","+character+") = "+nextState.getId());
+      processSteps.add("S("+currentState.getId()+", "+character+") = "+nextState.getId());
       return currentState.isFinal();
     }else {
       character = chain.charAt(index)+"";
       nextState = currentState.getTransition(character);
       if(nextState == null) {
-        processSteps.add("S("+currentState.getId()+","+character+") = sink");
-        System.out.println("S("+currentState.getId()+","+character+") = sink");
+        processSteps.add("S("+currentState.getId()+", "+character+") = sink");
         return false;
       }else {
-        processSteps.add("S("+currentState.getId()+","+character+") = "+nextState.getId());
-        System.out.println("S("+currentState.getId()+","+character+") = "+nextState.getId());
+        processSteps.add("S("+currentState.getId()+", "+character+") = "+nextState.getId());
         return processStringRecursive(chain, nextState, index+1);
       } 
     }
   }
 
+
+  /**
+   * Returs an array list with all the steps of evaluating a string.
+   * @return An ArrayList with all transitions needed to process the string
+   */
   public ArrayList<String> getProcessSteps() {
     return processSteps;
   }
-/**
- * Return an array of strings with all the states of this DFA
- */
-  public String[] getStates(){
+
+
+  /**
+   * Returns an array of strings with all the states of this DFA.
+   * @return String[]
+   */
+  public String[] getStates() {
     return this.states;
   }
 
+
+  /**
+   * Returns an array of strings with the characters of the alphabet.
+   * @return String[]
+   */
+  public String[] getAlphabet() {
+    return alphabet;
+  }
+
+
+  /**
+   * Returns the initial state of the automata.
+   * @return String
+   */
+  public String getInitialState() {
+    return initialState;
+  }
+
+
   /**
    * Minimizes the DFA and updates the transitions in the automata
-   * @return The states of this DFA
    */
   public void minimizeDFA() {
-    //System.out.println("*-*-*-*-*-*-*-*-*-* Minimizing DFA *-*-*-*-*-*-*-*-*-*");
+    System.out.println("*-*-*-*-*-*-*-*-*-* Minimizing DFA *-*-*-*-*-*-*-*-*-*");
     String[][] minimizedTable = minimizeTransitionTable(newTransitionTable());
     String[] finalStates = new String[minimizedTable.length];
     int totalFinal = 0;
@@ -115,19 +139,14 @@ public class DFA {
       }
       
       if (minimizedTable[i][0].equals(states[i])==false) {
-        //System.out.println("State "+currentState+ " renamed to "+states[i]+"\n");
+        System.out.println("State "+currentState+ " renamed to "+states[i]+"\n");
 
-        for (int a=0; a<minimizedTable.length; a++) {
-          for (int b=0; b<alphabet.length+1; b++) {
+        for (int a=0; a<minimizedTable.length; a++)
+          for (int b=0; b<alphabet.length+1; b++)
             minimizedTable[a][b] = (minimizedTable[a][b].equals(currentState)) ? states[i] : minimizedTable[a][b];
-            //System.out.print(minimizedTable[a][b]+"   ");
-          }
-          //System.out.println("");
-        }
-        //System.out.println("");
       }
     }
-    //System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
+    System.out.println("*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*");
     
     dfa.clear();
     states = new String[minimizedTable.length];
@@ -175,7 +194,7 @@ public class DFA {
           minimizedTable = new String[totalStates][alphabet.length+1];
           int row = 0;
 
-          //System.out.println("Row "+(i+1)+" is equal to row "+(j+1)+" | State "+states[j]+ " renamed to "+states[i]+"\n");
+          System.out.println("Row "+(i+1)+" is equal to row "+(j+1)+" | State "+states[j]+ " renamed to "+states[i]+"\n");
       
           for (int a=0; a<transitionTable.length; a++) {
             for (int b=0; b<alphabet.length+1; b++) {
@@ -184,16 +203,11 @@ public class DFA {
               else {
                 transitionTable[a][b] = (transitionTable[a][b].equals(states[j])) ? states[i] : transitionTable[a][b];
                 minimizedTable[row][b] = transitionTable[a][b];
-                
-                //if(transitionTable[a][0].equals("")==false) System.out.print(minimizedTable[row][b]+"   ");
               }
             }
-            if (transitionTable[a][0].equals("")==false) {
+            if (transitionTable[a][0].equals("")==false)
               row++;
-              //System.out.println("");
-            }
           }
-          //System.out.println("");
         }
       }
     return minimizedTable;
@@ -234,9 +248,7 @@ public class DFA {
           transitionTable[0][j] = alphabet[j-1];
           transitionTable[i][j] = (i>0) ? content[i-1][j] : transitionTable[i][j];
         }
-        //System.out.print(transitionTable[i][j]+"   ");
-      }    
-      //System.out.println("");
+      }
     }
 
     return transitionTable;

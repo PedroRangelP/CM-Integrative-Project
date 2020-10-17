@@ -8,6 +8,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
 import javafx.stage.Stage;
 import javafx.scene.text.Text;
 
@@ -21,10 +22,80 @@ public class DrawDFA {
   }
 
   public void getDFACanvas(StackPane canvasDFA) {
-    drawStateCircles(states.length, canvasDFA);
+    int[][] centers = drawStateCircles(states.length, canvasDFA);
+    drawTransitions(canvasDFA, centers);
    }
 
-  private StackPane drawStateCircles(int states, StackPane stackPane) {
+  private int linearSearch(String element){
+    for (int i = 0; i < states.length; i++)
+      if(states[i].equals(element))
+        return i;
+    return -1;
+  }
+
+   private void drawTransitions(StackPane pane, int[][] centers) {
+     Color[] colours = {Color.INDIGO, Color.FUCHSIA, Color.FORESTGREEN, Color.DARKBLUE, Color.BLUEVIOLET, Color.TOMATO, Color.CHARTREUSE, Color.DARKORANGE};
+     for (int i = 0; i < states.length; i++) {
+       State currState = dfa.getDfa().get(states[i]);
+       for (String character : dfa.getAlphabet()) {
+         State destino = currState.getTransition(character);
+
+         if (destino != null) {
+          Group group = (Group)pane.getChildren().get(0);
+          int colorAleatorio = (int)((Math.random()*10)%colours.length);
+          System.out.println(colorAleatorio);
+          if (destino.getId().equals(states[i])) {
+            QuadCurve curve = new QuadCurve(centers[i][0]+15, centers[i][1]-15, centers[i][0], centers[i][1]-120, centers[i][0]-15, centers[i][1]-15);
+            curve.setStroke(colours[colorAleatorio]);
+            curve.setFill(null);
+            drawArrowHeads(pane, colours[colorAleatorio], centers[i][0], centers[i][1]-120, centers[i][0]-15, centers[i][1]-15);
+            Text texto = new Text(centers[i][0], centers[i][1]-70, character);
+            texto.setFill(colours[colorAleatorio]);
+            group.getChildren().addAll(curve, texto);
+          }else {
+            int indexEnStates = linearSearch(destino.getId());
+            int[] point = getMiddlePoint(centers[i][0], centers[i][1], centers[indexEnStates][0], centers[indexEnStates][1]);
+            Line transition = new Line(centers[i][0], centers[i][1], centers[indexEnStates][0], centers[indexEnStates][1]);
+            transition.setStroke(colours[colorAleatorio]);
+            drawArrowHeads(pane, colours[colorAleatorio], centers[i][0], centers[i][1], centers[indexEnStates][0], centers[indexEnStates][1]);
+            System.out.println(String.format("char: %s srcX: %d srcY: %d destX: %d destY: %d",character, centers[i][0], centers[i][1], centers[indexEnStates][0], centers[indexEnStates][1]));
+            Text texto = new Text(point[0]+5, point[1]+5, character);
+            texto.setFill(colours[colorAleatorio]);
+            group.getChildren().addAll(transition, texto); 
+          }
+         }
+       }
+     }
+   }
+
+  public void drawArrowHeads(StackPane pane, Color color, int srcX, int srcY, int destX, int destY) {
+    Group group = (Group)pane.getChildren().get(0);
+
+    double angle = Math.atan2((destY - srcY), (destX - srcX)) - Math.PI / 2.0;
+    double sin = Math.sin(angle);
+    double cos = Math.cos(angle);
+    double arrowHeadSize = 15;
+
+    double x1 = (- 1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * arrowHeadSize + destX;
+    double y1 = (- 1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * arrowHeadSize + destY;
+    double x2 = (1.0 / 2.0 * cos + Math.sqrt(3) / 2 * sin) * arrowHeadSize + destX;
+    double y2 = (1.0 / 2.0 * sin - Math.sqrt(3) / 2 * cos) * arrowHeadSize + destY;
+    
+    Line h1 = new Line(x1, y1, destX, destY);
+    h1.setStroke(color);
+    Line h2 = new Line(x2, y2, destX, destY);
+    h2.setStroke(color);
+
+    group.getChildren().addAll(h1, h2);
+  }
+
+   public static int[] getMiddlePoint(int a, int b, int c, int d){
+     int co = d - b, ca = c - a;
+     int[] coordinate = {a+(5*ca/12), b+(5*co/12)};
+     return coordinate;
+   }
+
+  private int[][] drawStateCircles(int states, StackPane stackPane) {
     stackPane.getChildren().removeAll(stackPane.getChildren());
 
     Group group = new Group();
@@ -35,15 +106,22 @@ public class DrawDFA {
     for (int[] point : centers) {
       int posX = point[0];
       int posY = point[1];
+      State currState = dfa.getDfa().get(this.states[i]);
       Circle stateCircle = new Circle(posX, posY, 30, Color.YELLOW);
-      
+      stateCircle.setStroke(Color.BLACK);
       Text idState = new Text(posX, posY, this.states[i]);
       group.getChildren().addAll(stateCircle, idState);
+      if (currState.isFinal()) {
+        System.out.println(String.format("%s is final", this.states[i]));
+        Circle finalCircle = new Circle(posX, posY, 25, new Color(1, 1, 0, 0));
+        finalCircle.setStroke(Color.BLACK);
+        group.getChildren().addAll(finalCircle);
+      }
       ++i;
     }
     stackPane.getChildren().add(group);
     
-    return stackPane;
+    return centers;
   }
 
   private static int getBigRadious(int states){
