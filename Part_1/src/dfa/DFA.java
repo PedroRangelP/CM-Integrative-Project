@@ -96,7 +96,7 @@ public class DFA {
 
   /**
    * Returns an array of strings with all the states of this DFA.
-   * @return String[]
+   * @return Array with all the String representations of the names of the states
    */
   public String[] getStates() {
     return this.states;
@@ -105,7 +105,7 @@ public class DFA {
 
   /**
    * Returns an array of strings with the characters of the alphabet.
-   * @return String[]
+   * @return An array of Strings with the characters of the alphabet
    */
   public String[] getAlphabet() {
     return alphabet;
@@ -114,7 +114,7 @@ public class DFA {
 
   /**
    * Returns the initial state of the automata.
-   * @return String
+   * @return The String representation of the initial state of this DFA
    */
   public String getInitialState() {
     return initialState;
