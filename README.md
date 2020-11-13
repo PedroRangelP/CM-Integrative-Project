@@ -1,7 +1,7 @@
 # Integrative Project
 
 ## Part 1
-A Java program that reads from a file the elements that define an DFA and builds the equivalent minimized DFA. Also, the program say if a string is accepted or not by any DFA.
+**A Java program that reads from a file the elements that define an DFA and builds the equivalent minimized DFA. Also, the program say if a string is accepted or not by any DFA.**
 
 The transition table needs to be defined in a *txt file*. The file shall be defined as follows:
 - The first line indicates the set of states of the automata separated by commas.
@@ -10,7 +10,7 @@ The transition table needs to be defined in a *txt file*. The file shall be defi
 - The fourth line indicates the set of final states separated by commas.
 - The following lines indicate the evaluation of of the extended transition function with the elements of the alphabet in the following format:
   - state, symbol = > state
-    - Example, the following line 'q0, a = > q1' indicates that the DFA processes the following: δ(q0,a) = q1
+    - Example, the following line `q0, a = > q1` indicates that the DFA processes the following: δ(q0,a) = q1
 
 It is not necessary that all transitions are specified in this file. An evaluation may not appear if a state indicating that the result of that evaluation is the empty set.
 
@@ -18,7 +18,7 @@ The program display the states of the minimized automaton or ask for a string an
 
 
 ## Part 2
-A Java program that reads from a file the elements that define a context-free grammar and apply the top-down parsing process for strings given by the user.
+**A Java program that reads from a file the elements that define a context-free grammar and apply the top-down parsing process for strings given by the user.**
 
 The grammar needs to be defined in a *txt file*. The file shall be defined as follows:
 - The first line indicates the set of non-terminal symbols separated by commas, only one uppercase character.
