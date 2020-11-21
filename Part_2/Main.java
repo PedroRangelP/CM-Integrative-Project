@@ -16,5 +16,11 @@ public class Main {
     Hashtable<String, LinkedList<String>> productions = inputReader.getProductions();
     
     TopDownParsing topDownParsing = new TopDownParsing(nonTerminalSymbols, terminalSymbols, startSymbol, productions);
+
+    String testInput = inputReader.getString();
+    int maxDepth = inputReader.getMaxDepth();
+
+    topDownParsing.parsingProcess(testInput, maxDepth);
+    //topDownParsing.parsingProcess("aaaa", 9);
   }
 }
