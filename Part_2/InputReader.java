@@ -14,7 +14,7 @@ public class InputReader {
     for(int i = 0; i < availableFiles.length; i++)
       System.out.println(i+1 + " " + availableFiles[i]);
     System.out.print("Choose a file: ");
-    int indexFile = 2;//Integer.parseInt(consola.nextLine()) - 1;
+    int indexFile = Integer.parseInt(consola.nextLine()) - 1;
     sc = new Scanner(new File("test/" + availableFiles[indexFile]));
   }
 

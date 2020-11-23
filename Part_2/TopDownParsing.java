@@ -15,18 +15,17 @@ public class TopDownParsing {
   }
 
   public void parsingProcess(String p, int maxDepth) {
-    LinkedList<String> Q = new LinkedList<>();
-    LinkedList<String> T = new LinkedList<>();
+    LinkedList<Leaf> Q = new LinkedList<>();
+    LinkedList<Leaf> T = new LinkedList<>();
     String u = "", w = "", v = "";
     //Step 1
-    T.add(startSymbol);
-    Q.add(startSymbol);
-    int depth = 1;
+    T.add(new Leaf(startSymbol, 1));
+    Q.add(new Leaf(startSymbol, 1));
     //Step 2
-    while(!Q.isEmpty() && !p.equals(u+w+v) && depth < maxDepth){
+    while(!(Q.isEmpty() || p.equals(u+w+v))){
       //Step 2.1
-      String q = Q.poll();
-      depth++;
+      Leaf actual = Q.poll();
+      String q = actual.getChain();
       //Step 2.2
       int i = 0;
       //Step 2.3
@@ -38,6 +37,7 @@ public class TopDownParsing {
       v = qParts[2];
       if(A.equals(""))
         continue;
+        
       int numProductionsForA = productions.get(A).size();
       while(!p.equals(u+w+v)){
         //Step 2.4.1
@@ -49,11 +49,11 @@ public class TopDownParsing {
           w = productions.get(A).get(i);
           String newString = u+w+v;
           //Step 2.4.2.1
-          if (!p.equals(newString) && prefixMatch(p, newString)) {
+          if (/*!p.equals(newString) && */prefixMatch(p, newString) && actual.getDepth() < maxDepth) {
             //Step 2.4.2.1.1
-            Q.add(newString);
+            Q.add(new Leaf(newString, actual.getDepth()+1));
             //Step 2.4.2.1.2
-            T.add(newString);
+            T.add(new Leaf(newString, actual.getDepth()+1));
           }
         }
         //Step 2.4.3
@@ -61,6 +61,7 @@ public class TopDownParsing {
       }
     }
     //Step 3
+    printTree(T);
     if (p.equals(u+w+v)) {
       System.out.println("Accepted");
     } else {
@@ -104,6 +105,18 @@ public class TopDownParsing {
     if (indexOfLeftmostNonTerminal+1 < qLength)
       array[2] = q.substring(indexOfLeftmostNonTerminal+1);
     return array;
+  }
+
+  private void printTree(LinkedList<Leaf> T) {
+    int current = 0;
+
+    for (Leaf leaf : T) {
+      if (leaf.getDepth() > current) {
+        current++;
+        System.out.println("-----Level "+ current+"-----");
+      }
+      System.out.println(leaf.getChain());
+    }
   }
 
 }

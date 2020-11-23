@@ -21,6 +21,5 @@ public class Main {
     int maxDepth = inputReader.getMaxDepth();
 
     topDownParsing.parsingProcess(testInput, maxDepth);
-    //topDownParsing.parsingProcess("aaaa", 9);
   }
 }
